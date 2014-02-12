@@ -1,0 +1,24 @@
+CXX			= cl
+CXXFLAGS	= /O2 /fp:fast /GL /Wall /I ../Eigen /I ../boost_1_55_0 /I ../gsl /nologo /EHsc /wd4350 /wd4365 /wd4514 /wd4668 /wd4710 /wd4711 /wd4820 /wd4640 /wd4626 /wd4571 /wd4512
+LDFLAGS		= /LTCG
+LIBS		= C:/MinGW/msys/1.0/local/lib/libgsl.a
+
+BIN		= synth.exe
+OBJS	= main.obj Tract.obj SpeechSynthesizer.obj
+
+.SUFFIXES: .cxx .obj
+
+all:		$(BIN)
+
+$(BIN):		$(OBJS)
+			$(CXX) $(OBJS) /Fe$(BIN) /link $(LDFLAGS) $(LIBS)
+
+main.cxx:	Tract.h SpeechSynthesizer.h
+Tract.cxx:	Tract.h Const.h
+SpeechSynthesizer.cxx:	SpeechSynthesizer.h Const.h
+
+.cxx.obj:
+			$(CXX) $(CXXFLAGS) /c $<
+
+clean:
+			del *.obj *.exe
