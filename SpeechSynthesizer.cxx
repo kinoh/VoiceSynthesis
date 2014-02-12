@@ -277,6 +277,13 @@ void SpeechSynthesizer::CalcTract(void)
 #endif
 }
 
+inline static complex<double> Exp(const complex<double> z)
+{
+    double re = real(z);
+    double im = imag(z);
+    return exp(re) * complex<double>(cos(im), sin(im));
+}
+
 void SpeechSynthesizer::CalcResponse(double res[], const complex<double> spec[])
 {
     for (int i = 0; i < N; i++)
@@ -291,7 +298,7 @@ void SpeechSynthesizer::CalcResponse(double res[], const complex<double> spec[])
 			complex<double> s(0, omg);
 			double c_f = 1 / (1 + exp(4 * (8.0 * j / N - 5)));	// designed to decrease around 5/8
 
-			r += c_t * c_f / (2 * Const::pi * N) * spec[j - 1] * exp(s * t);
+			r += c_t * c_f / (2 * Const::pi * N) * spec[j - 1] * Exp(s * t);
 		}
 
 		res[i] = real(r);
